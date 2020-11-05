@@ -5,13 +5,21 @@ import {Uri} from 'monaco-editor/esm/vs/editor/editor.api';
 
 import {files} from './typings';
 import '../common.css'
+import axios from 'axios';
+
+async function sendData() {
+    axios.post('http://164.125.219.21',{
+        lang : this.state.curLanguage,
+        code : this.state.code
+    });
+    alert('Send Data!');
+  }
 
 const curLanguage = 'python';
 const code =
 `
 `
 export class AdvancedTypescriptEditor extends Component {
-
     constructor(props){
         super(props);
 
@@ -56,6 +64,7 @@ export class AdvancedTypescriptEditor extends Component {
         editor.focus();
     }
 
+    
     render() {
 
         const languages = ['c', 'cpp', 'java','python'];
@@ -72,6 +81,10 @@ export class AdvancedTypescriptEditor extends Component {
             <div>
                 <div className="d-flex justify-content-center"> 
                     <span className="title">Code Editor</span>
+                    <button onClick={sendData}>
+                        Send
+                    </button>
+
                     <select className="language" value={this.state.curLanguage} onChange={this.handleLanguageChange}>
                         {listItems}
                     </select>
