@@ -8,10 +8,10 @@ import '../common.css'
 import axios from 'axios';
 
 async function sendData() {
-    axios.post('http://164.125.219.21',{
-        lang : this.state.curLanguage,
-        code : this.state.code
-    });
+    // axios.post('http://164.125.219.21',{
+    //     lang : this.state.curLanguage,
+    //     code : this.state.code
+    // });
     alert('Send Data!');
   }
 
@@ -66,7 +66,6 @@ export class AdvancedTypescriptEditor extends Component {
 
     
     render() {
-
         const languages = ['c', 'cpp', 'java','python'];
         const listItems = languages.map((item) =>
             <option value={item} key={item}>{item}</option>
