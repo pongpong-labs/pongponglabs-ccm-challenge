@@ -4,16 +4,9 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Uri} from 'monaco-editor/esm/vs/editor/editor.api';
 
 import {files} from './typings';
-import '../common.css'
-import axios from 'axios';
+import '../common.css';
 
-async function sendData() {
-    // axios.post('http://164.125.219.21',{
-    //     lang : this.state.curLanguage,
-    //     code : this.state.code
-    // });
-    alert('Send Data!');
-  }
+import history from "./history.js";
 
 const curLanguage = 'python';
 const code =
@@ -24,7 +17,7 @@ export class AdvancedTypescriptEditor extends Component {
         super(props);
 
         this.state = {
-            code,curLanguage
+            code, curLanguage
         }
 
         this.reloadMonacoData();
@@ -76,11 +69,42 @@ export class AdvancedTypescriptEditor extends Component {
                 ||
                 monaco.editor.createModel(code, curLanguage, monaco.Uri.parse("file:///main.tsx"))
         }
+
+        function hashCode(s) {
+            let h;
+            for(let i = 0; i < s.length; i++)
+                h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+        
+            return h;
+        }
+        
+        async function sendData(codeData, langData) {
+            var hashData = hashCode(codeData)
+
+            let xhr = new XMLHttpRequest();
+
+            const url = 'http://164.125.219.21:8888/upload-code?'
+            const lang = 'lang=' + langData;
+            const code = 'code=' + codeData;
+            const hash = 'hashCode=' + hashData;
+
+            xhr.open("POST", url + lang + '&' + code + '&' + hash);
+            xhr.send(null);
+            
+            history.push("/result/" + langData + hashData);
+        }
+
         return (
             <div>
                 <div className="d-flex justify-content-center"> 
                     <span className="title">Code Editor</span>
-                    <button onClick={sendData}>
+                    <button onClick={() => {
+                            const code = window.localStorage.getItem('monaco-editor-online-value');
+                            const langData = window.localStorage.getItem('monaco-editor-language-value');
+
+                            sendData(code, langData);
+                        }
+                    }>
                         Send
                     </button>
 
@@ -119,7 +143,7 @@ export class AdvancedTypescriptEditor extends Component {
         if(storeData){
             setTimeout(() => {
                 this.setState({  code: storeData  })
-            }, 100);;
+            }, 100);
         }
     }
 
@@ -128,7 +152,7 @@ export class AdvancedTypescriptEditor extends Component {
         if(langData){
             setTimeout(() => {
                 this.setState({  curLanguage: langData  })
-            }, 100);;
+            }, 100);
         }
     }
 }
