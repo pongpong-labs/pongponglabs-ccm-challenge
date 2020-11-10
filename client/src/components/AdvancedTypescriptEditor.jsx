@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import MonacoEditor from 'react-monaco-editor'
+import MonacoEditor from 'react-monaco-editor';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {Uri} from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -12,17 +12,21 @@ const curLanguage = 'python';
 const code =
 `
 `
+const fontSize = 11;
+
 export class AdvancedTypescriptEditor extends Component {
     constructor(props){
         super(props);
 
         this.state = {
-            code, curLanguage
+            code, curLanguage, fontSize
         }
 
         this.reloadMonacoData();
 
         this.reloadLanguage();
+
+        this.reloadFontSize();
     }
 
     onMonacoChange(newValue, e) {
@@ -57,17 +61,29 @@ export class AdvancedTypescriptEditor extends Component {
         editor.focus();
     }
 
-    
     render() {
         const languages = ['c', 'cpp', 'java','python'];
         const listItems = languages.map((item) =>
             <option value={item} key={item}>{item}</option>
         );
-        const options = {
+
+        const textSize = [11, 12, 13, 14, 15, 16];
+        const textSizeItems = textSize.map((size) =>
+            <option value = {size} key={size}>{size}</option>
+        );
+
+        let options = {
+            minimap: { enabled: true },
             selectOnLineNumbers: true,
+            cursorBlinking: "blink",
+            fontSize : this.state.fontSize,
+            cursorStyle: 'line',
+            options: monaco.editor.IEditorConstructionOptions = {
+
+            },
             model: monaco.editor.getModel(Uri.parse("file:///main.tsx"))
                 ||
-                monaco.editor.createModel(code, curLanguage, monaco.Uri.parse("file:///main.tsx"))
+                monaco.editor.createModel(code, curLanguage, monaco.Uri.parse("file:///main.tsx")),
         }
 
         function hashCode(s) {
@@ -97,7 +113,7 @@ export class AdvancedTypescriptEditor extends Component {
         return (
             <div>
                 <div className="d-flex justify-content-center"> 
-                    <span className="title">Code Editor</span>
+                    <span className="title">PNU Code Editor</span>
                     <button onClick={() => {
                             const code = window.localStorage.getItem('monaco-editor-online-value');
                             const langData = window.localStorage.getItem('monaco-editor-language-value');
@@ -111,6 +127,11 @@ export class AdvancedTypescriptEditor extends Component {
                     <select className="language" value={this.state.curLanguage} onChange={this.handleLanguageChange}>
                         {listItems}
                     </select>
+
+                    <select className="fontsize" value={this.state.fontSize} onChange={this.handleFontSizeChange}>
+                        {textSizeItems}
+                    </select>
+
                 </div>
                 <div className="momacoClass">
                     <MonacoEditor
@@ -138,6 +159,16 @@ export class AdvancedTypescriptEditor extends Component {
         this.reloadMonacoData();
     };
 
+    handleFontSizeChange = e => {
+        this.setState({
+            fontSize: e.target.value
+        });
+
+        window.localStorage.setItem('monaco-editor-language-value',e.target.value);
+
+        this.reloadFontSize();
+    }
+
     reloadMonacoData(){
         const storeData = window.localStorage.getItem('monaco-editor-online-value');
         if(storeData){
@@ -152,6 +183,15 @@ export class AdvancedTypescriptEditor extends Component {
         if(langData){
             setTimeout(() => {
                 this.setState({  curLanguage: langData  })
+            }, 100);
+        }
+    }
+
+    reloadFontSize(){
+        const sizeData = window.localStorage.getItem('monaco-editor-language-value')
+        if(sizeData){
+            setTimeout(() => {
+                this.setState({ fontSize: sizeData })
             }, 100);
         }
     }
