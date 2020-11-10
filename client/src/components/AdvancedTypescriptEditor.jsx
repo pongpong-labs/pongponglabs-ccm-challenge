@@ -83,13 +83,16 @@ export class AdvancedTypescriptEditor extends Component {
 
             let xhr = new XMLHttpRequest();
 
-            const url = 'http://164.125.219.21:8888/upload-code?'
-            const lang = 'lang=' + langData;
-            const code = 'code=' + codeData;
-            const hash = 'hashCode=' + hashData;
+            const json = {
+                "fileName": langData + hashData,
+                "code": codeData
+            };
 
-            xhr.open("POST", url + lang + '&' + code + '&' + hash);
-            xhr.send(null);
+            xhr.open("POST", 'http://164.125.219.21:8888/upload-code');
+            
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            
+            xhr.send(JSON.stringify(json));
             
             history.push("/result/" + langData + hashData);
         }
