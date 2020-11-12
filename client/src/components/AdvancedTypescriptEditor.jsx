@@ -146,7 +146,7 @@ export class AdvancedTypescriptEditor extends Component {
                         onChange={this.onMonacoChange}
                         editorWillMount={this.editorWillMount}
                         editorDidMount={this.editorDidMount}
-                        // options={this.state.options}
+                        options={this.state.options}
                     />
                 </div>
             </div>
@@ -154,23 +154,68 @@ export class AdvancedTypescriptEditor extends Component {
     }
 
     handleLanguageChange = e => {
+        let originCode = '';
+        
+        if(e.target.value === "c") {
+            originCode = 
+`#include <stdio.h>
+
+int main()
+{
+    printf("Hello World");
+
+    return 0;
+}`
+        }
+
+        if(e.target.value === "cpp") {
+            originCode = 
+`#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    cout<<"Hello World";
+
+    return 0;
+}`
+        }
+
+        if(e.target.value === "java") {
+            originCode = 
+`package org.example;
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+	}
+}`
+        }
+
+        if(e.target.value === "python") {
+            originCode = `print ('Hello World')`
+        }
+
         this.setState({
-            curLanguage: e.target.value
+            curLanguage: e.target.value,
+            code: originCode 
         });
 
         window.localStorage.setItem('monaco-editor-language-value',e.target.value);
+        window.localStorage.setItem('monaco-editor-online-value', originCode)
+
     };
 
     handleFontSizeChange = e => {
-        console.log("set font")
         this.setState({
             options: {
                 ...this.state.options,
                 fontSize: e.target.value
             }
-        }, () => console.log("set font fin"))
-            
-        window.localStorage.setItem('monaco-editor-language-value',e.target.value);
+        })
+        window.localStorage.setItem('monaco-editor-language-value',e.target.value);       
     }
 
     reloadMonacoData(){
