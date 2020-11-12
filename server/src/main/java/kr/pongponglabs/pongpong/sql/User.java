@@ -11,16 +11,25 @@ public class User {
     @Column(nullable = false)
     private String fileName;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
+    private String code;
+
+    @Column()
     private String state;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String result;
 
     public User(String fileName, String state, String result) {
         this.fileName = fileName;
         this.state = state;
         this.result = result;
+    }
+
+    public User(String fileName, String code) {
+        this.fileName = fileName;
+        this.code = code;
+        this.state = "Ready";
     }
 
     public User() {}
@@ -55,5 +64,13 @@ public class User {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

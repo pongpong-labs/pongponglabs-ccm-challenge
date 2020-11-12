@@ -1,17 +1,24 @@
 package kr.pongponglabs.pongpong;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SonarScannerRunner {
+public class CppCheckRunner {
     public String run(String projectName, Language language) {
-        makePropertyFile(projectName);
+        String extension = ".c";
+
+        if(language.type == Language.Type.CPP)
+            extension += "pp";
 
         ProcessBuilder processBuilder = new ProcessBuilder();
 
-        processBuilder.command("sonar-scanner");
+        processBuilder.command("cppcheck", "--output-file=report.txt", "--enable=all", "main" + extension);
 
         processBuilder.directory(new File("./projects/" + projectName));
 
@@ -34,24 +41,23 @@ public class SonarScannerRunner {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return res.toString();
-    }
 
-    private void makePropertyFile(String fileName) {
+        Path path = Paths.get("./projects/" + projectName + "/report.txt");
+        Charset cs = StandardCharsets.UTF_8;
+
+        List<String> stringList = new ArrayList<>();
+
         try {
-            File property = new File("./projects/" + fileName + "/sonar-project.properties");
-            if (property.createNewFile()) {
-                FileWriter writer = new FileWriter(property);
-
-                String options = "sonar.projectKey=" + fileName + "\n"
-                               + "sonar.host.url=http://164.125.219.21:6379" + "\n";
-
-                writer.write(options);
-                writer.close();
-            }
+            stringList = Files.readAllLines(path,cs);
         } catch (IOException e) {
-            System.out.println("An error occurred.");
             e.printStackTrace();
         }
+
+        StringBuilder report = new StringBuilder();
+
+        for(String line : stringList)
+            report.append(line).append('\n');
+
+        return report.toString();
     }
 }

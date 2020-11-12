@@ -46,7 +46,7 @@ public class FileUploadController {
         user = userRepository.save(user);
         SonarScannerRunner runner = new SonarScannerRunner();
 
-        runner.run(fileName);
+        runner.run(fileName, new Language(Language.Type.Other));
 
         user.setState("Parsing report");
         user = userRepository.save(user);
