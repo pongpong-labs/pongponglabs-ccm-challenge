@@ -9,7 +9,7 @@
 
 ## 설치방법
 
-### Windows & Linux
+### [Client] Windows & Linux 
 
 ```
 https://github.com/pongpong-labs/pongponglabs-ccm-challenge.git
@@ -26,6 +26,25 @@ yarn
 
 ```
 yarn start
+```
+
+### [Server] Linux 
+
+```
+https://github.com/pongpong-labs/pongponglabs-ccm-challenge.git
+```
+
+```
+cd server 
+```
+
+```
+maven package or mvn install
+```
+
+
+```
+java -jar pongpong-0.0.1-SNAPSHOT.war
 ```
 
 ## 참여인원
