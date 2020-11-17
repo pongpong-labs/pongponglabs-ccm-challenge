@@ -55,6 +55,7 @@ java -jar pongpong-0.0.1-SNAPSHOT.war
 ## 참고
 
 - react-monaco-editor, https://github.com/react-monaco-editor/react-monaco-editor
+- sonarqube, https://www.sonarqube.org
 
 ## 라이센스
 
