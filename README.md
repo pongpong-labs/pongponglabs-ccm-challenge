@@ -12,7 +12,7 @@
 ### [Client] Windows & Linux 
 
 ```
-https://github.com/pongpong-labs/pongponglabs-ccm-challenge.git
+git clone https://github.com/pongpong-labs/pongponglabs-ccm-challenge.git
 ```
 
 ```
@@ -31,7 +31,7 @@ yarn start
 ### [Server] Linux 
 
 ```
-https://github.com/pongpong-labs/pongponglabs-ccm-challenge.git
+git clone https://github.com/pongpong-labs/pongponglabs-ccm-challenge.git
 ```
 
 ```
